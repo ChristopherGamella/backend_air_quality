@@ -8,9 +8,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Database configuration from .env
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "mysql+pymysql://root:1122@mysql/airquality")
-
+MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
+MYSQL_USER = os.getenv("MYSQL_USER", "root")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "1122")
+MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "airquality")
+DATABASE_URL = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

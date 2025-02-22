@@ -26,3 +26,13 @@ class AirQualityResponse(AirQualityBase):
 
     class Config:
         from_attributes = True  # Allows ORM models to work with Pydantic
+
+
+class AirQualityCoGtResponse(BaseModel):
+    Date: date
+    CO_GT: Optional[float]
+
+
+class AirQualityColResponse(BaseModel):
+    Date: date
+    Col: Optional[float]

@@ -1,8 +1,7 @@
 from fastapi import FastAPI
-from sqlalchemy import create_engine, MetaData, Table, select
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import create_engine, MetaData, Table
 import os
-import pandas as pd
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes import air_quality
 
@@ -11,6 +10,23 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
+
+# CORS configuration
+origins = [
+    "http://localhost",
+    "http://localhost:8000",
+    "http://127.0.0.1",
+    "http://127.0.0.1:8000",
+    "*",  # Allow all origins
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # MySQL configuration
 MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
@@ -29,45 +45,4 @@ air_quality_table = Table(
 
 # ✅ JSON time-series endpoint for ECharts
 
-
 app.include_router(air_quality.router)
-
-
-@app.get("/")
-async def read_root():
-    return {"message": "Welcome to the Air Quality API! Auto-reload is enabled."}
-
-
-@app.get("/timeseries/{column}")
-async def get_timeseries(column: str, start_date: str = None, end_date: str = None):
-    """Fetches time-series data in JSON format for ECharts"""
-
-    try:
-        with engine.connect() as conn:
-            query = select(
-                air_quality_table.c.Date,
-                air_quality_table.c.Time,
-                air_quality_table.c[column]
-            )
-
-            if start_date and end_date:
-                query = query.where(
-                    (air_quality_table.c.Date >= start_date) &
-                    (air_quality_table.c.Date <= end_date)
-                )
-
-            result = conn.execute(query)
-            df = pd.DataFrame(result.fetchall(), columns=[
-                              "Date", "Time", column])
-
-            # Convert Date and Time to a single timestamp
-            df["Datetime"] = pd.to_datetime(df["Date"] + " " + df["Time"])
-            df = df[["Datetime", column]]
-
-            # Convert data to list of [timestamp, value] pairs
-            data = df.values.tolist()
-
-            return {"series": data}
-
-    except SQLAlchemyError as err:
-        return {"message": f"Something went wrong: {err}"}

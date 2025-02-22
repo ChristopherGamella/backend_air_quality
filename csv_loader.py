@@ -39,7 +39,7 @@ def create_table_and_import_data():
                 if row_count > 0:
                     print(
                         "Table 'air_quality' already exists and is not empty. Skipping CSV import.")
-                    return
+                    return True
 
         # Import data from CSV
         df = pd.read_csv(CSV_FILE, sep=";", decimal=",")

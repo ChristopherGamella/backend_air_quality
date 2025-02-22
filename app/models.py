@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Date, Time, MetaData, Table
+from sqlalchemy import Column, Integer, String, Float, Date, Time, MetaData, Table, Index
 from .database import engine
 
 metadata = MetaData()
@@ -6,8 +6,8 @@ metadata = MetaData()
 air_quality_table = Table(
     'air_quality', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('Date', Date, nullable=False),
-    Column('Time', Time, nullable=False),
+    Column('Date', Date, nullable=True),
+    Column('Time', Time, nullable=True),
     Column('CO_GT', Float),
     Column('PT08_S1_CO', Float),
     Column('NMHC_GT', Float),
@@ -21,4 +21,6 @@ air_quality_table = Table(
     Column('T', Float),
     Column('RH', Float),
     Column('AH', Float),
+    Index('idx_date', 'Date'),
+    Index('idx_time', 'Time')
 )
