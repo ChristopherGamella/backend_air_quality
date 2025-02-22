@@ -21,7 +21,7 @@ This repository hosts a FastAPI-based backend API designed for retrieving air qu
 1.  **Clone the Repository:**
 
     ```bash
-    git clone [https://github.com/ChristopherGamella/backend_air_quality.git](https://github.com/ChristopherGamella/backend_air_quality.git)
+    git clone https://github.com/ChristopherGamella/backend_air_quality.git
     cd backend_air_quality
     ```
 
@@ -48,7 +48,7 @@ This repository hosts a FastAPI-based backend API designed for retrieving air qu
 1.  **Clone the Repository:**
 
     ```bash
-    git clone [https://github.com/ChristopherGamella/backend_air_quality.git](https://github.com/ChristopherGamella/backend_air_quality.git)
+    git clone https://github.com/ChristopherGamella/backend_air_quality.git
     cd backend_air_quality
     ```
 
